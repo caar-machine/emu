@@ -16,6 +16,9 @@ CFILES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp)
 HFILES = $(wildcard $(SRC_DIR)/*.hpp) $(wildcard $(SRC_DIR)/*/*.hpp)
 OFILES = $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(CFILES))
 
+CFLAGS = -std=c++17 -Wall -Werror -Wextra -Isrc -DGIT_HASH=\"$(shell git rev-parse --short HEAD)\"
+LDFLAGS = -lfmt -lSDL2
+
 BINARY = $(TARGET)
 
 BUILD_DIR = build/$(TARGET)
@@ -33,7 +36,7 @@ $(BUILD_DIR)/%.o: %.cpp $(HFILES)
 $(BINARY): $(OFILES)
 	@mkdir -p $(@D)
 	@$(call ECHO,LD $@)
-	@$(CC) -o $@ $^
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
 clean:
 	@-rm -rf $(BUILD_DIR) $(BINARY)
