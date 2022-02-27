@@ -8,7 +8,13 @@ fmt_dep = dependency('fmt')
 
 inc = include_directories('src')
 
-add_global_arguments('-DGITHASH=$(git rev-parse --short HEAD)', language: 'cpp')
+r = run_command('git', 'rev-parse', '--short', 'HEAD', check: true)
+
+output = r.stdout().strip()
+
+param = '-DGIT_HASH="' + output + '"'
+
+add_global_arguments(param, language: 'cpp')
 
 files = [
     'src/cpu.cpp',
