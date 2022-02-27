@@ -36,8 +36,9 @@ Gpu::Gpu(int width, int height) : _width(width), _height(height)
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    pixels = new uint32_t[FB_SIZE];
+    pixels = new uint32_t[FB_SIZE]();
 
-    SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+
     SDL_RenderClear(renderer);
 }

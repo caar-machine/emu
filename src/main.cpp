@@ -44,6 +44,17 @@ int main(int argc, char **argv)
     bus.attach(gpu);
 
     caar::Cpu cpu(ram, bus);
+
+    std::ifstream input(program_options::rom_file(), std::ios::binary);
+
+    std::vector<char> buffer(
+        (std::istreambuf_iterator<char>(input)),
+        (std::istreambuf_iterator<char>()));
+
+    input.close();
+
+    ram.write_chunk(buffer, 0);
+
     SDL_Event event;
 
     bool done = false;
@@ -78,7 +89,7 @@ int main(int argc, char **argv)
 
             if (event.type == SDL_KEYDOWN)
             {
-                //ivt_trigger_interrupt(10, false, &cpu);
+                cpu.trigger_interrupt(10, false);
             }
         }
 

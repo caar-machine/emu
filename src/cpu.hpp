@@ -10,6 +10,11 @@ class Cpu
 public:
     Cpu(Ram &ram, Bus &bus) : _ram(ram), _bus(bus){};
     void do_cycle() {}
+    void trigger_interrupt(int number, bool software = true)
+    {
+        (void)number;
+        (void)software;
+    }
 
 private:
     Ram &_ram;

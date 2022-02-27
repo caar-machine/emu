@@ -19,7 +19,7 @@ class Ram
 public:
     Ram(uint8_t size) : _size(size)
     {
-        buffer = new uint8_t[size];
+        buffer = new uint8_t[size]();
     }
 
     template <typename T>
