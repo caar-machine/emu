@@ -8,7 +8,7 @@ fmt_dep = dependency('fmt')
 
 inc = include_directories('src')
 
-add_global_arguments('-DGITHASH=$(git rev-parse --short HEAD)', language : 'cpp')
+add_global_arguments('-DGITHASH=$(git rev-parse --short HEAD)', language: 'cpp')
 
 files = [
     'src/cpu.cpp',

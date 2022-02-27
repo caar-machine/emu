@@ -1,2 +1,3 @@
 -Isrc
 -DGIT_HASH
+-std=gnu++17
