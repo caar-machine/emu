@@ -9,6 +9,8 @@
 #    define GIT_HASH "unknown"
 #endif
 
+constexpr int instructions_per_sec = 25'00'00'00;
+
 int main(int argc, char **argv)
 {
     try
@@ -63,7 +65,6 @@ int main(int argc, char **argv)
     int tick_end = SDL_GetTicks();
     int ticks_per_second = 60;
     int ticks = 0;
-    int instructions_per_sec = 25000000;
 
     while (!done)
     {

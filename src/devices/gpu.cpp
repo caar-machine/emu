@@ -6,10 +6,10 @@ using namespace caar::dev;
 void Gpu::write(uint32_t address)
 {
     (void)address;
-    log("Attempting to write to gpu");
+    log("Attempting to write to gpu at address {:x}", address);
 }
 
-uint32_t Gpu::read()
+inline uint32_t Gpu::read()
 {
     return FB_ADDRESS;
 }
@@ -21,7 +21,7 @@ void Gpu::update()
     SDL_RenderPresent(renderer);
 }
 
-void Gpu::action(uint32_t pixel, uint32_t address)
+inline void Gpu::action(uint32_t pixel, uint32_t address)
 {
     pixels[address - FB_ADDRESS] = pixel;
 }
