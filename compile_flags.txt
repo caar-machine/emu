@@ -1,3 +1,4 @@
 -Isrc
 -DGIT_HASH
 -std=gnu++17
+-Wno-gnu-zero-variadic-macro-arguments
