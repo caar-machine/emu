@@ -15,13 +15,43 @@
 #define CPU_IVT 10
 #define CPU_PT 11
 #define CPU_PF 12
+
 namespace caar
 {
+
+struct [[gnu::packed]] InstructionEncoding
+{
+
+    uint8_t value : 6;
+    uint8_t param_type : 2;
+};
+
+struct InstructionDecoding
+{
+    enum
+    {
+        DECODE_IMM,
+        DECODE_REG,
+    } type;
+    union
+    {
+        uint32_t *ptr;
+        uint32_t val;
+    };
+};
 
 class Cpu
 {
 public:
-    Cpu(Ram &ram, Bus &bus) : _ram(ram), _bus(bus){};
+    Cpu(Ram &ram, Bus &bus) : _ram(ram), _bus(bus)
+    {
+        regs[CPU_PC] = 0x1000;
+        regs[CPU_SP] = MEMORY_SIZE;
+        flags.EQ = 0;
+        flags.LT = 0;
+        flags.PL = 0;
+    }
+
     void do_cycle();
     void trigger_interrupt(int number, bool software = true);
 
@@ -37,6 +67,14 @@ private:
         uint8_t LT : 1;
         uint8_t PL : 1;
     } flags;
+
+    uint8_t fetch();
+
+    void push(uint32_t what);
+
+    uint32_t pop();
+
+    InstructionDecoding decode(uint8_t byte, bool set = false);
 };
 
 } // namespace caar

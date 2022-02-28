@@ -9,7 +9,7 @@
 #    define GIT_HASH "unknown"
 #endif
 
-constexpr int instructions_per_sec = 25'00'00'00;
+constexpr int instructions_per_sec = 250'000'00;
 
 int main(int argc, char **argv)
 {
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     log("  - bootrom path: {}", program_options::rom_file());
     log("  - disks: [{}]", fmt::join(program_options::disks(), ", "));
 
-    caar::Ram ram(program_options::mem_size());
+    caar::Ram ram(MEMORY_SIZE);
 
     caar::Bus bus(ram);
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
     input.close();
 
-    ram.write_chunk(buffer, 0);
+    ram.write_chunk(buffer, 0x1000);
 
     SDL_Event event;
 

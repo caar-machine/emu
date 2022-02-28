@@ -1,3 +1,5 @@
 build
 caar-vm
 caar-emu
+*.bin
+*.lisp

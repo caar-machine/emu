@@ -3,7 +3,7 @@
 #include <opts.hpp>
 #include <vector>
 
-#define MEMORY_SIZE (program_options::mem_size() * 1024 * 1024)
+#define MEMORY_SIZE (uint32_t)(program_options::mem_size() * 1024 * 1024)
 #define FB_WIDTH 1024
 #define FB_HEIGHT 768
 #define FB_SIZE FB_WIDTH *FB_HEIGHT
@@ -17,7 +17,7 @@ namespace caar
 class Ram
 {
 public:
-    Ram(uint8_t size) : _size(size)
+    Ram(uint32_t size) : _size(size)
     {
         buffer = new uint8_t[size]();
     }
@@ -35,7 +35,7 @@ public:
 
 private:
     uint8_t *buffer;
-    uint8_t _size;
+    uint32_t _size;
 };
 
 } // namespace caar

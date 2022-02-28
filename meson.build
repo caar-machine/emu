@@ -1,6 +1,6 @@
 project('caar-emu','cpp',
     version: '0.1',
-    default_options: ['cpp_std=gnu++17', 'warning_level=3', 'werror=true'],
+    default_options: ['cpp_std=gnu++17', 'warning_level=2', 'werror=true'],
     license: 'MIT')
 
 sdl2_dep = dependency('sdl2')
@@ -29,6 +29,8 @@ files = [
     'src/devices/gpu.cpp',
     'src/devices/bus.hpp',
     'src/devices/bus.cpp',
+    'src/devices/io.cpp',
+    'src/devices/io.hpp',
     ]
 
 executable('caar-emu', sources: files, include_directories: inc, dependencies: [sdl2_dep, fmt_dep])

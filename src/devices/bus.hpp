@@ -35,8 +35,8 @@ struct [[gnu::packed]] RawBus
 struct BusDevice
 {
 public:
-    void write(uint32_t address);
-    uint32_t read();
+    void write(uint32_t address) { (void)address; }
+    uint32_t read() { return 0; }
 
     void action(uint32_t param, uint32_t param1);
 
@@ -65,12 +65,14 @@ public:
 
         else if (address >= FB_ADDRESS && address <= FB_ADDRESS + FB_SIZE)
         {
-            std::find_if(devices.begin(), devices.end(), [](BusDevice dev)
+            std::find_if(devices.begin(), devices.end(), [](BusDevice dev) -> bool
                          {
                              if (dev.type == BUS_DEV_GPU)
                              {
                                  return true;
                              }
+
+                             return false;
                          });
         }
 
@@ -81,12 +83,12 @@ public:
             if (index > device_num)
                 error("Out of bounds write to bus.");
 
-            devices[index].write(val, _ram);
+            devices[index].write(val);
         }
 
         else
         {
-            _ram.write<T>(address);
+            _ram.write<T>(address, val);
         }
     }
 
