@@ -28,21 +28,27 @@ struct [[gnu::packed]] RawBusDevice
 
 struct [[gnu::packed]] RawBus
 {
-    uint32_t device_count;
-    RawBusDevice devices[32];
+    uint32_t device_count = 0;
+    RawBusDevice devices[32] = {};
 };
 
 struct BusDevice
 {
-public:
-    void write(uint32_t address) { (void)address; }
-    uint32_t read() { return 0; }
+    BusDevice(DeviceType _type) : type(_type){};
 
-    void action(uint32_t param, uint32_t param1);
+    virtual void write(uint32_t address) { (void)address; }
+    virtual uint32_t read() { return 0; }
+    virtual ~BusDevice() = 0;
+
+    virtual void action(uint32_t param, uint32_t param1)
+    {
+        (void)param;
+        (void)param1;
+    }
 
     Bus *_bus;
-    DeviceType type;
-};
+    DeviceType type = BUS_DEV_EMPTY;
+}; // namespace caar
 
 class Bus
 {
@@ -52,7 +58,7 @@ public:
         raw_bus = new RawBus;
     }
 
-    void attach(BusDevice dev);
+    void attach(BusDevice *dev);
 
     template <typename T>
     void write(uint32_t address, T val)
@@ -65,15 +71,16 @@ public:
 
         else if (address >= FB_ADDRESS && address <= FB_ADDRESS + FB_SIZE)
         {
-            std::find_if(devices.begin(), devices.end(), [](BusDevice dev) -> bool
-                         {
-                             if (dev.type == BUS_DEV_GPU)
-                             {
-                                 return true;
-                             }
+            BusDevice **device = std::find_if(devices, devices + 32, [](BusDevice *dev) -> bool
+                                              {
+                                                  if (dev->type == BUS_DEV_GPU)
+                                                  {
+                                                      return true;
+                                                  }
 
-                             return false;
-                         });
+                                                  return false;
+                                              });
+            (*device)->action(val, address);
         }
 
         else if (address >= MEMORY_SIZE + 0x1000 && address < MEMORY_SIZE + 0x2000)
@@ -83,7 +90,7 @@ public:
             if (index > device_num)
                 error("Out of bounds write to bus.");
 
-            devices[index].write(val);
+            devices[index]->write(val);
         }
 
         else
@@ -122,7 +129,7 @@ public:
                 error("Out of bounds read to bus.");
             }
 
-            return devices[index].read();
+            return devices[index]->read();
         }
 
         else
@@ -137,7 +144,7 @@ public:
 
 private:
     size_t device_num = 0;
-    std::array<BusDevice, 32> devices;
+    BusDevice *devices[32];
     RawBus *raw_bus;
 
 private:

@@ -160,11 +160,14 @@ void Cpu::do_cycle()
         [0x18] = &&out,
         [0x19] = &&stw,
         [0x1a] = &&ldw,
+        [0x1b] = &&_int,
+        [0x1c] = &&call,
+        [0x1d] = &&mov,
     };
 
     uint8_t byte = fetch();
 
-    if (byte > 0x1A)
+    if (byte > 0x1D)
     {
         log("Invalid opcode: {:x}", byte);
     }
@@ -194,6 +197,10 @@ cdr:
 
 nop:
 {
+    if (program_options::debug())
+    {
+        log("nop at PC {:x}", regs[CPU_PC]);
+    }
     return;
 }
 
@@ -383,6 +390,31 @@ ldw:
 
     return;
 };
+
+_int:
+{
+    CPU_GET_VAL();
+
+    trigger_interrupt(val, true);
+    return;
+}
+
+call:
+{
+    CPU_GET_VAL();
+
+    push(regs[CPU_PC]);
+
+    regs[CPU_PC] = val;
+    return;
+}
+
+mov:
+{
+    CPU_SET_LHS_AND_GET_RHS();
+    *lhs = rhs;
+    return;
+}
 }
 
 void Cpu::trigger_interrupt(int number, bool software)

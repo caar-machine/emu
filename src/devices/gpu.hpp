@@ -13,14 +13,17 @@ class Gpu : public BusDevice
 public:
     Gpu(int width, int height);
 
-    void write(uint32_t address);
-    uint32_t read();
+    void write(uint32_t address) override;
+    uint32_t read() override;
+
+    Bus *_bus;
+    DeviceType type = BUS_DEV_GPU;
 
     void update();
-    void action(uint32_t pixel, uint32_t address);
+    void action(uint32_t pixel, uint32_t address) override;
 
 private:
-    uint32_t *pixels;
+    uint32_t *pixels = nullptr;
     int _width = 0, _height = 0;
     SDL_Window *window;
     SDL_Renderer *renderer;

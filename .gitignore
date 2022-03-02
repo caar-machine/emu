@@ -3,3 +3,4 @@ caar-vm
 caar-emu
 *.bin
 *.lisp
+.cache

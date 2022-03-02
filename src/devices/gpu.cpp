@@ -21,12 +21,12 @@ void Gpu::update()
     SDL_RenderPresent(renderer);
 }
 
-inline void Gpu::action(uint32_t pixel, uint32_t address)
+void Gpu::action(uint32_t pixel, uint32_t address)
 {
     pixels[address - FB_ADDRESS] = pixel;
 }
 
-Gpu::Gpu(int width, int height) : _width(width), _height(height)
+Gpu::Gpu(int width, int height) : BusDevice(BUS_DEV_GPU), _width(width), _height(height)
 {
     SDL_Init(SDL_INIT_VIDEO);
 

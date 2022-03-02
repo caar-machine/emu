@@ -56,8 +56,7 @@ bool program_options::has_option(const std::vector<std::string> &args, const std
 
 std::vector<std::string> get_multiple_options(const std::vector<std::string> &args, std::vector<std::string> options)
 {
-    std::vector<std::string> ret;
-    ret.clear();
+    std::vector<std::string> ret = {};
 
     for (size_t i = 0; i < args.size(); i++)
     {

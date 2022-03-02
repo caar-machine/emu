@@ -2,10 +2,12 @@
 
 using namespace caar;
 
-void Bus::attach(BusDevice dev)
+void Bus::attach(BusDevice *dev)
 {
     devices[device_num++] = dev;
 }
+
+BusDevice::~BusDevice() {}
 
 RawBus *Bus::get_raw_bus()
 {
@@ -15,7 +17,8 @@ RawBus *Bus::get_raw_bus()
 
         for (size_t i = 0; i < device_num; i++)
         {
-            raw_bus->devices[i].type = devices[i].type;
+            raw_bus->devices[i].type = devices[i]->type;
+
             raw_bus->devices[i].addr = i + MEMORY_SIZE + 0x1000;
         }
     }

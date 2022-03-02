@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cpu.hpp>
+#include <devices/disk.hpp>
 #include <devices/gpu.hpp>
 #include <fstream>
 #include <log.hpp>
@@ -41,9 +42,16 @@ int main(int argc, char **argv)
 
     caar::Bus bus(ram);
 
-    caar::dev::Gpu gpu(FB_WIDTH, FB_HEIGHT);
+    caar::dev::Gpu *gpu = new caar::dev::Gpu(FB_WIDTH, FB_HEIGHT);
 
     bus.attach(gpu);
+
+    caar::DiskController disk_controller(ram, &bus);
+
+    for (auto e : program_options::disks())
+    {
+        disk_controller.attach_disk(e.data());
+    }
 
     caar::Cpu cpu(ram, bus);
 
@@ -96,7 +104,7 @@ int main(int argc, char **argv)
 
         if (ticks % ticks_per_second == 0)
         {
-            gpu.update();
+            gpu->update();
         }
 
         tick_end = SDL_GetTicks();
