@@ -40,6 +40,18 @@ struct InstructionDecoding
     };
 };
 
+struct [[gnu::packed]] IvtEntry
+{
+    uint8_t used : 1;
+    uint8_t dpl : 1;
+    uint32_t address;
+};
+
+struct [[gnu::packed]] Ivt
+{
+    IvtEntry entries[256];
+};
+
 class Cpu
 {
 public:
@@ -54,6 +66,7 @@ public:
 
     void do_cycle();
     void trigger_interrupt(int number, bool software = true);
+    void load_ivt(uint32_t address);
 
     uint32_t regs[14] = {0};
 
@@ -75,6 +88,8 @@ private:
     uint32_t pop();
 
     InstructionDecoding decode(uint8_t byte, bool set = false);
+
+    Ivt ivt = {};
 };
 
 } // namespace caar

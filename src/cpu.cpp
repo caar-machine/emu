@@ -412,13 +412,24 @@ call:
 mov:
 {
     CPU_SET_LHS_AND_GET_RHS();
-    *lhs = rhs;
+
+    if (lhs == &regs[CPU_IVT])
+    {
+        load_ivt(rhs);
+    }
+
+    else
+    {
+        *lhs = rhs;
+    }
     return;
 }
 }
 
 void Cpu::trigger_interrupt(int number, bool software)
 {
+    push(regs[CPU_PC]);
+
     if (program_options::debug())
     {
         log("Interrupt #{} ({})", number, software ? "software" : "hardware");
@@ -428,5 +439,27 @@ void Cpu::trigger_interrupt(int number, bool software)
         log("r6={:x} r7={:x} pc={:x}", regs[CPU_R6], regs[CPU_R7], regs[CPU_PC]);
         log("sp={:x} pt={:x} pf={:x}", regs[CPU_SP], regs[CPU_PT], regs[CPU_PF]);
         log("ivt={:x}", regs[CPU_IVT]);
+    }
+
+    if (ivt.entries[number].used)
+    {
+        regs[CPU_PC] = ivt.entries[number].address;
+    }
+    else
+    {
+        error("Unhandled interrupt: {}", number);
+        regs[CPU_PC] = pop();
+    }
+}
+
+void Cpu::load_ivt(uint32_t address)
+{
+    if (flags.PL == 0)
+    {
+        ivt = _ram.read<Ivt>(address);
+    }
+    else
+    {
+        trigger_interrupt(0, false);
     }
 }
