@@ -14,7 +14,7 @@ output = r.stdout().strip()
 
 param = '-DGIT_HASH="' + output + '"'
 
-add_global_arguments(param, language: 'cpp')
+add_project_arguments(param, language: 'cpp')
 
 files = [
     'src/cpu.cpp',
