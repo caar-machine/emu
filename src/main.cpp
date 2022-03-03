@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
     for (auto e : program_options::disks())
     {
-        disk_controller.attach_disk(e.data());
+        disk_controller.attach_disk((char *)e.data());
     }
 
     caar::Cpu cpu(ram, bus);
