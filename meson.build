@@ -36,4 +36,10 @@ files = [
  
     ]
 
-executable('caar-emu', sources: files, include_directories: inc, dependencies: [sdl2_dep, fmt_dep])
+install_dir = join_paths(meson.current_source_dir(), 'bin')
+
+if meson.is_subproject()
+  install_dir = join_paths(meson.current_source_dir(), '../bin')
+endif
+
+executable('caar-emu', sources: files, include_directories: inc, install: true, install_dir: install_dir, dependencies: [sdl2_dep, fmt_dep])
