@@ -10,11 +10,12 @@
 #define CPU_R5 5
 #define CPU_R6 6
 #define CPU_R7 7
-#define CPU_SP 8
-#define CPU_PC 9
-#define CPU_IVT 10
-#define CPU_PT 11
-#define CPU_PF 12
+#define CPU_R8 8
+#define CPU_SP 9
+#define CPU_PC 10
+#define CPU_IVT 11
+#define CPU_PT 12
+#define CPU_PF 13
 
 namespace caar
 {

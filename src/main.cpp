@@ -10,7 +10,8 @@
 #    define GIT_HASH "unknown"
 #endif
 
-constexpr int instructions_per_sec = 250'000'00;
+constexpr static int instructions_per_sec = 25'000'000;
+constexpr static int ticks_per_second = 60;
 
 int main(int argc, char **argv)
 {
@@ -41,12 +42,11 @@ int main(int argc, char **argv)
     caar::Ram ram(MEMORY_SIZE);
 
     caar::Bus bus(ram);
+    caar::DiskController disk_controller(ram, &bus);
 
     caar::dev::Gpu *gpu = new caar::dev::Gpu(FB_WIDTH, FB_HEIGHT);
 
     bus.attach(gpu);
-
-    caar::DiskController disk_controller(ram, &bus);
 
     for (auto e : program_options::disks())
     {
@@ -71,7 +71,6 @@ int main(int argc, char **argv)
 
     int tick_start = SDL_GetTicks();
     int tick_end = SDL_GetTicks();
-    int ticks_per_second = 60;
     int ticks = 0;
 
     while (!done)

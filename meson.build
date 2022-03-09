@@ -1,6 +1,6 @@
 project('caar-emu','cpp',
     version: '0.1',
-    default_options: ['cpp_std=gnu++17', 'warning_level=2', 'werror=true', 'optimization=g'],
+    default_options: ['cpp_std=gnu++17', 'warning_level=2', 'werror=true', 'optimization=3'],
     license: 'MIT')
 
 sdl2_dep = dependency('sdl2')

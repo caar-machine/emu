@@ -19,7 +19,7 @@ class Ram
 public:
     Ram(uint32_t size) : _size(size)
     {
-        buffer = new uint8_t[size]();
+        buffer = (uint8_t *)calloc(size, 1);
     }
 
     template <typename T>

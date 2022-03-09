@@ -36,9 +36,10 @@ Gpu::Gpu(int width, int height) : BusDevice(BUS_DEV_GPU), _width(width), _height
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    pixels = new uint32_t[FB_SIZE]();
+    pixels = (uint32_t *)calloc(FB_SIZE, sizeof(uint32_t));
 
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
 
     SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
 }
