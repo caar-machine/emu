@@ -12,7 +12,7 @@ void DiskDevice::write(uint32_t address)
     {
         for (int i = 0; i < 512 * command.sectors; i++)
         {
-            _ram.write<uint8_t>(command.address + i, _buf[command.offset + i]);
+            _ram.write<uint8_t>(command.address + i, _buf[command.offset * 512 + i]);
         }
     }
 
