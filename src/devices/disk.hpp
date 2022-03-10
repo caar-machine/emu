@@ -8,6 +8,7 @@ struct [[gnu::packed]] DiskCommand
 {
     uint8_t type;
     uint8_t sectors;
+    uint32_t offset;
     uint32_t address;
 };
 

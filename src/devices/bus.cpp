@@ -5,6 +5,11 @@ using namespace caar;
 void Bus::attach(BusDevice *dev)
 {
     devices[device_num++] = dev;
+
+    if (dev->type == BUS_DEV_GPU)
+    {
+        gpu = dev;
+    }
 }
 
 BusDevice::~BusDevice() {}

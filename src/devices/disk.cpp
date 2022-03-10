@@ -6,26 +6,17 @@ using namespace caar;
 
 void DiskDevice::write(uint32_t address)
 {
-    uint8_t bytes[6] = {0};
+    auto command = _ram.read<DiskCommand>(address);
 
-    bytes[0] = _ram.read<uint8_t>(address);
-    bytes[1] = _ram.read<uint8_t>(address + 1);
-    bytes[2] = _ram.read<uint8_t>(address + 2);
-    bytes[3] = _ram.read<uint8_t>(address + 3);
-    bytes[4] = _ram.read<uint8_t>(address + 4);
-    bytes[5] = _ram.read<uint8_t>(address + 5);
-
-    auto command = reinterpret_cast<DiskCommand *>(bytes);
-
-    if (command->type == 0) // Read
+    if (command.type == 0) // Read
     {
-        for (int i = 0; i < 512 * command->sectors; i++)
+        for (int i = 0; i < 512 * command.sectors; i++)
         {
-            _ram.write<uint8_t>(command->address + i, _buf[i]);
+            _ram.write<uint8_t>(command.address + i, _buf[command.offset + i]);
         }
     }
 
-    else if (command->type == 1) // Write
+    else if (command.type == 1) // Write
     {
         error("TODO: write");
     }

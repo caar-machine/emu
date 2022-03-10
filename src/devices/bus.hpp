@@ -71,16 +71,8 @@ public:
 
         else if (address >= FB_ADDRESS && address <= FB_ADDRESS + FB_SIZE)
         {
-            BusDevice **device = std::find_if(devices, devices + 32, [](BusDevice *dev) -> bool
-                                              {
-                                                  if (dev->type == BUS_DEV_GPU)
-                                                  {
-                                                      return true;
-                                                  }
-
-                                                  return false;
-                                              });
-            (*device)->action(val, address);
+            if (gpu)
+                gpu->action(val, address);
         }
 
         else if (address >= MEMORY_SIZE + 0x1000 && address < MEMORY_SIZE + 0x2000)
@@ -146,6 +138,7 @@ private:
     size_t device_num = 0;
     BusDevice *devices[32];
     RawBus *raw_bus;
+    BusDevice *gpu;
 
 private:
     Ram &_ram;
