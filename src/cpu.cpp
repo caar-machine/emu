@@ -163,11 +163,13 @@ void Cpu::do_cycle()
         [0x1b] = &&_int,
         [0x1c] = &&call,
         [0x1d] = &&mov,
+        [0x1e] = &&lsh,
+        [0x1f] = &&rsh,
     };
 
     uint8_t byte = fetch();
 
-    if (byte > 0x1D)
+    if (byte > 0x1F)
     {
         log("Invalid opcode: {:x}", byte);
     }
@@ -428,6 +430,17 @@ mov:
     {
         *lhs = rhs;
     }
+    return;
+}
+
+lsh:
+{
+    CPU_OP(<<);
+    return;
+}
+rsh:
+{
+    CPU_OP(>>);
     return;
 }
 }
